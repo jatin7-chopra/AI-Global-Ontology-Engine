@@ -6,7 +6,6 @@ import plotly.graph_objects as go
 import requests
 import folium
 from streamlit_folium import st_folium
-from collections import Counter
 
 st.set_page_config(page_title="AI Global Ontology Engine", layout="wide")
 
@@ -17,10 +16,17 @@ st.title("🌍 AI Global Ontology Intelligence Engine")
 @st.cache_data(ttl=600)
 def fetch_gnews(api_key, query, max_results):
 url = "https://gnews.io/api/v4/search"
-params = {"q": query, "max": max_results, "apikey": api_key}
+params = {
+"q": query,
+"max": max_results,
+"apikey": api_key
+}
+
+```
 res = requests.get(url, params=params)
 data = res.json()
 return data.get("articles", [])
+```
 
 query = st.text_input("Search Topic", "World")
 max_results = st.slider("Number of Articles", 5, 20, 10)
@@ -35,8 +41,6 @@ else:
     rows = []
     for a in articles:
         text = (a.get("title","") + " " + a.get("description",""))
-        
-        # SIMPLE ENTITY EXTRACTION (NO SPACY)
         entities = text.split()[:5]
 
         rows.append({
@@ -63,8 +67,8 @@ else:
 
     if len(G.nodes()) > 0:
         pos = nx.spring_layout(G)
-        edge_x, edge_y = [], []
 
+        edge_x, edge_y = [], []
         for edge in G.edges():
             x0, y0 = pos[edge[0]]
             x1, y1 = pos[edge[1]]
@@ -83,7 +87,7 @@ else:
         st.plotly_chart(fig_graph)
 
     st.subheader("🌍 Map")
-    m = folium.Map(location=[20,0], zoom_start=2)
-    folium.Marker([28.61,77.23], popup="India").add_to(m)
+    m = folium.Map(location=[20, 0], zoom_start=2)
+    folium.Marker([28.61, 77.23], popup="India").add_to(m)
     st_folium(m, width=700, height=400)
 ```
