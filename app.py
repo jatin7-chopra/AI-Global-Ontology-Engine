@@ -1,5 +1,4 @@
 import streamlit as st
-import spacy
 import networkx as nx
 import pandas as pd
 import plotly.express as px
